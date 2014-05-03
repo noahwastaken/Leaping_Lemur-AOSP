@@ -1,0 +1,103 @@
+﻿### LICENSE:
+#
+# Copyright (C) 2011 Ahmad Amarullah ( http://amarullz.com/ )
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+### FILE INFO:
+#
+# AROMA Installer 2.70 - AROMA Installer Test Script Configuration
+#       (c) 2011-2012 by Ahmad Amarullah
+#           amarullz - xda-developers
+#           http://www.amarullz.com/
+#
+#       Binary Version  : 2.70B6
+#       Binary Codename : Flamboyan
+#
+### INFO:
+#
+# * AROMA Resource Dir  = META-INF/com/google/android/aroma
+#
+# * AROMA Temporary Dir = /tmp/aroma/
+
+ini_set("rom_name",             "Leaping Lemur AOSP");
+ini_set("rom_version",          "Build #1");
+ini_set("rom_author",           "Tal Noah");
+ini_set("rom_device",           "Sprint HTC One");
+ini_set("rom_date",             "May 3, 2014");
+
+ini_set("force_colorspace","rgba");
+ini_set("dp","6");
+
+fontresload( "0", "ttf/Roboto-Regular.ttf", "12" );
+fontresload( "1", "ttf/Roboto-Regular.ttf", "18" ); 
+
+theme("ics");
+
+viewbox(
+    "Welcome",
+    "You are about to flash <b>"+
+	  ini_get("rom_name")+
+	"</b>\nfor <b>"+ini_get("rom_device")+"</b>.\n\n"+
+    
+	
+      "  VERSION\t: <b><#selectbg_g>"+ini_get("rom_version")+"</#></b>\n"+
+      "  AUTHOR \t: <b><#selectbg_g>"+ini_get("rom_author")+"</#></b>\n"+
+      "  RELEASED\t: <b><#selectbg_g>"+ini_get("rom_date")+"</#></b>\n\n\n"+
+
+    "Press Next to Continue...",
+    "@welcome"
+);
+
+agreebox("Terms Of Use","Please read the Terms of Use...","icons/agreement",
+   "" + readfile_aroma("agreement.txt"),
+   "I Agree with these Terms Of Use...",
+   "Please check the box..."
+);
+
+textbox("Changelog",ini_get("rom_name") + " Changelog","icons/info",readfile_aroma("changelog.txt"));
+
+menubox(
+  "Lemur Installer",
+  "Ready to install",
+  "@info",
+  "menu.prop",
+  "Install Lemur","","@install",
+  "Abort installation","","@default"
+);
+
+if prop("menu.prop","selected")=="2"
+then
+  exit("");
+endif;
+
+setvar("retstatus",
+install(
+  "Installing",
+  "Installing Lemur Kernel...\nPlease wait...",
+  "@install")
+);
+
+ini_set("text_next", "Finish");
+
+if getvar("retstatus")=="0" then
+  viewbox(
+  "Installation Completed",
+  "<#080>Congratulations...</#>\n\n"+
+  "Lemur has been installed successfully!\n\n"+
+  "Enjoy!",
+  "@info"
+);
+else
+   viewbox("Installation Failed","\n\nInstaller Status: "+ getvar("retstatus"),"@alert");
+endif;
