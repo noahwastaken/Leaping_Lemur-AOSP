@@ -42,12 +42,9 @@ fi
         cd $k
 # Setup output directory
        mkdir -p "out/$c"
-          cp -R "$t/system" out/$c
           cp -R "$t/META-INF" out/$c
 	  cp -R "$t/boot" out/$c
 	  cp -R "$t/config" out/$c
-	  cp -R "$t/l2m" out/$c
-	  cp -R "$t/no_l2m" out/$c
        mkdir -p "out/$c/system/lib/modules/"
 
   m=$k/out/$c/system/lib/modules
